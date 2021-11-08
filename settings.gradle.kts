@@ -1,13 +1,12 @@
 pluginManagement {
-    val quarkusPluginVersion: String by settings
-    val quarkusPluginId: String by settings
+    val quarkusVersion: String by settings
     repositories {
         mavenLocal()
         mavenCentral()
         gradlePluginPortal()
     }
     plugins {
-        id(quarkusPluginId) version quarkusPluginVersion
+        id("io.quarkus") version quarkusVersion
     }
 }
 rootProject.name = "sandbox-quarkus"
