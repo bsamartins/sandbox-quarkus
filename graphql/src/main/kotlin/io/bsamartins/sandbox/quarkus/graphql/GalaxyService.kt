@@ -1,5 +1,6 @@
 package io.bsamartins.sandbox.quarkus.graphql
 
+import io.smallrye.mutiny.Uni
 import java.time.LocalDate
 import java.time.Month
 import javax.enterprise.context.ApplicationScoped
@@ -9,15 +10,15 @@ class GalaxyService {
     private val heroes: MutableList<Hero> = mutableListOf()
     private val films: MutableList<Film> = mutableListOf()
 
-    val allFilms: List<Film>
-        get() = films
+    fun allFilms(): Uni<List<Film>> = films.asUni()
 
-    fun getFilm(id: Int): Film {
-        return films[id]
+    fun getFilm(id: Int): Uni<Film> {
+        return films[id].asUni()
     }
 
-    fun getHeroesByFilm(film: Film): List<Hero> {
+    fun getHeroesByFilm(film: Film): Uni<List<Hero>> {
         return heroes.filter { hero -> hero.episodeIds.contains(film.episodeID) }
+            .asUni()
     }
 
     fun addHero(hero: Hero) {
@@ -28,8 +29,9 @@ class GalaxyService {
         return heroes.removeAt(id)
     }
 
-    fun getHeroesBySurname(surname: String): List<Hero> {
+    fun getHeroesBySurname(surname: String): Uni<List<Hero>> {
         return heroes.filter { hero: Hero -> hero.surname == surname }
+            .asUni()
     }
 
     init {
