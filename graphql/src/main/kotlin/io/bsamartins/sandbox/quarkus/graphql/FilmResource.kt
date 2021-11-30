@@ -3,6 +3,7 @@ package io.bsamartins.sandbox.quarkus.graphql
 import io.smallrye.mutiny.Uni
 import org.eclipse.microprofile.graphql.Description
 import org.eclipse.microprofile.graphql.GraphQLApi
+import org.eclipse.microprofile.graphql.Mutation
 import org.eclipse.microprofile.graphql.Query
 import org.eclipse.microprofile.graphql.Source
 
@@ -30,11 +31,11 @@ class FilmResource(private val service: GalaxyService) {
 //    fun createHero(hero: Hero): Uni<Hero> {
 //        return galaxyService.addHero(hero)
 //    }
-//
-//    @Mutation
-//    fun deleteHero(id: Int): Uni<Hero> {
-//        return galaxyService.deleteHero(id)
-//    }
+
+    @Mutation
+    fun deleteHero(id: Int): Uni<Hero> {
+        return service.deleteHero(id)
+    }
 
     fun director(@Source film: Film): Uni<Director> {
         return service.getDirector(film.directorId)
