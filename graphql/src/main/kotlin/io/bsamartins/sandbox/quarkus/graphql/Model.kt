@@ -11,6 +11,7 @@ annotation class Model
 
 @Model
 data class Film(
+    val id: Int? = null,
     val title: String,
     val episodeID: Int,
     @Ignore
@@ -23,6 +24,7 @@ data class Director(val id: Int?, val name: String)
 
 @Model
 data class Hero(
+    val id: Int? = null,
     val name: String,
     val surname: String,
     val darkSide: Boolean,

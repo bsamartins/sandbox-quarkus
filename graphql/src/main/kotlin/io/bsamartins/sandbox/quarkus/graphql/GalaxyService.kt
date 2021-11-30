@@ -7,32 +7,37 @@ import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
 class GalaxyService {
-    private val heroes: MutableList<Hero> = mutableListOf()
-    private val films: MutableList<Film> = mutableListOf()
+    private val heroes: MutableMap<Int, Hero> = mutableMapOf()
+    private var heroCounter: Int = 0
+
+    private val films: MutableMap<Int, Film> = mutableMapOf()
+    private var filmCounter: Int = 0
+
     private val directors: MutableMap<Int, Director> = mutableMapOf()
 
-    fun allFilms(): Uni<List<Film>> = films.asUni()
+    fun allFilms(): Uni<List<Film>> = films.values.toList().asUni()
 
     fun getFilm(id: Int): Uni<Film> {
-        return films[id].asUni()
+        return films.getValue(id).asUni()
     }
 
     fun getHeroesByFilm(film: Film): Uni<List<Hero>> {
-        return heroes.filter { hero -> hero.episodeIds.contains(film.episodeID) }
+        return heroes.values.filter { hero -> hero.episodeIds.contains(film.episodeID) }
             .asUni()
     }
 
     fun addHero(hero: Hero): Uni<Hero> {
-        heroes.add(hero)
-        return hero.asUni()
+        val newHero = hero.copy(id = heroCounter++)
+        heroes[newHero.id!!] = newHero
+        return newHero.asUni()
     }
 
     fun deleteHero(id: Int): Uni<Hero> {
-        return heroes.removeAt(id).asUni()
+        return heroes.remove(id)!!.asUni()
     }
 
     fun getHeroesBySurname(surname: String): Uni<List<Hero>> {
-        return heroes.filter { hero -> hero.surname == surname }.asUni()
+        return heroes.values.filter { hero -> hero.surname == surname }.asUni()
     }
 
     fun getDirector(id: Int): Uni<Director> = directors.getValue(id).asUni()
@@ -42,6 +47,7 @@ class GalaxyService {
         directors[georgeLucas.id!!] = georgeLucas
 
         val aNewHope = Film(
+            id = filmCounter++,
             title = "A New Hope",
             releaseDate = LocalDate.of(1977, Month.MAY, 25),
             episodeID = 4,
@@ -49,6 +55,7 @@ class GalaxyService {
         )
 
         val theEmpireStrikesBack = Film(
+            id = filmCounter++,
             title = "The Empire Strikes Back",
             releaseDate = LocalDate.of(1980, Month.MAY, 21),
             episodeID = 5,
@@ -56,17 +63,19 @@ class GalaxyService {
         )
 
         val returnOfTheJedi = Film(
+            id = filmCounter++,
             title = "Return Of The Jedi",
             releaseDate = LocalDate.of(1983, Month.MAY, 25),
             episodeID = 6,
             directorId = georgeLucas.id,
         )
 
-        films.add(aNewHope)
-        films.add(theEmpireStrikesBack)
-        films.add(returnOfTheJedi)
+        films[aNewHope.id!!] = aNewHope
+        films[theEmpireStrikesBack.id!!] = theEmpireStrikesBack
+        films[returnOfTheJedi.id!!] = returnOfTheJedi
 
         val luke = Hero(
+            id = heroCounter++,
             name = "Luke",
             surname = "Skywalker",
             lightSaber = LightSaber.GREEN,
@@ -75,6 +84,7 @@ class GalaxyService {
         )
 
         val leia = Hero(
+            id = heroCounter++,
             name = "Leia",
             surname = "Organa",
             darkSide = false,
@@ -83,6 +93,7 @@ class GalaxyService {
         )
 
         val vader = Hero(
+            id = heroCounter++,
             name = "Darth",
             surname = "Vader",
             darkSide = true,
@@ -90,8 +101,8 @@ class GalaxyService {
             episodeIds = listOf(4, 5, 6),
         )
 
-        heroes.add(luke)
-        heroes.add(leia)
-        heroes.add(vader)
+        heroes[luke.id!!] = luke
+        heroes[leia.id!!] = leia
+        heroes[vader.id!!] = vader
     }
 }
