@@ -69,8 +69,6 @@ class GalaxyService {
         val luke = Hero(
             name = "Luke",
             surname = "Skywalker",
-            height = 1.7,
-            mass = 73,
             lightSaber = LightSaber.GREEN,
             darkSide = false,
             episodeIds = listOf(4, 5, 6),
@@ -79,8 +77,6 @@ class GalaxyService {
         val leia = Hero(
             name = "Leia",
             surname = "Organa",
-            height = 1.5,
-            mass = 51,
             darkSide = false,
             lightSaber = LightSaber.BLUE,
             episodeIds = listOf(4, 5, 6),
@@ -89,8 +85,6 @@ class GalaxyService {
         val vader = Hero(
             name = "Darth",
             surname = "Vader",
-            height = 1.9,
-            mass = 89,
             darkSide = true,
             lightSaber = LightSaber.RED,
             episodeIds = listOf(4, 5, 6),

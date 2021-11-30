@@ -1,6 +1,7 @@
 package io.bsamartins.sandbox.quarkus.graphql
 
 import org.eclipse.microprofile.graphql.Ignore
+import org.eclipse.microprofile.graphql.Input
 import java.time.LocalDate
 
 @Target(AnnotationTarget.CLASS)
@@ -24,12 +25,20 @@ data class Director(val id: Int?, val name: String)
 data class Hero(
     val name: String,
     val surname: String,
-    val height: Double,
-    val mass: Int,
     val darkSide: Boolean,
     val lightSaber: LightSaber,
     val episodeIds: List<Int> = emptyList(),
 )
+
+@Model
+@Input("HeroInput")
+class HeroInput {
+    var name: String? = null
+    var surname: String? = null
+    var darkSide: Boolean? = null
+    var lightSaber: LightSaber? = null
+    var episodeIds: List<Int> = emptyList()
+}
 
 enum class LightSaber {
     RED, BLUE, GREEN

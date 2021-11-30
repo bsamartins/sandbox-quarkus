@@ -27,10 +27,18 @@ class FilmResource(private val service: GalaxyService) {
         return service.getFilm(filmId)
     }
 
-//    @Mutation
-//    fun createHero(hero: Hero): Uni<Hero> {
-//        return galaxyService.addHero(hero)
-//    }
+    @Mutation
+    fun createHero(input: HeroInput): Uni<Hero> {
+        return service.addHero(
+            Hero(
+                name = input.name!!,
+                surname = input.surname!!,
+                lightSaber = input.lightSaber!!,
+                darkSide = input.darkSide!!,
+                episodeIds = input.episodeIds,
+            )
+        )
+    }
 
     @Mutation
     fun deleteHero(id: Int): Uni<Hero> {
