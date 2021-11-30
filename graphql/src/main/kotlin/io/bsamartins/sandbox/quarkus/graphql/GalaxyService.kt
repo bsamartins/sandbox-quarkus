@@ -21,17 +21,17 @@ class GalaxyService {
             .asUni()
     }
 
-    fun addHero(hero: Hero) {
+    fun addHero(hero: Hero): Uni<Hero> {
         heroes.add(hero)
+        return hero.asUni()
     }
 
-    fun deleteHero(id: Int): Hero {
-        return heroes.removeAt(id)
+    fun deleteHero(id: Int): Uni<Hero> {
+        return heroes.removeAt(id).asUni()
     }
 
     fun getHeroesBySurname(surname: String): Uni<List<Hero>> {
-        return heroes.filter { hero: Hero -> hero.surname == surname }
-            .asUni()
+        return heroes.filter { hero -> hero.surname == surname }.asUni()
     }
 
     init {
