@@ -15,4 +15,7 @@ pluginManagement {
 }
 rootProject.name = "sandbox-quarkus"
 
-include("hibernate-reactive")
+include(
+    "hibernate-reactive",
+    "graphql"
+)
