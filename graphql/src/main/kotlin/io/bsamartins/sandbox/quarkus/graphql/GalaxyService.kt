@@ -22,7 +22,8 @@ class GalaxyService {
     }
 
     fun getHeroesByFilm(film: Film): Uni<List<Hero>> {
-        return heroes.values.filter { hero -> hero.episodeIds.contains(film.episodeID) }
+        film.heroIds ?: return Uni.createFrom().nullItem()
+        return heroes.values.filter { hero -> film.heroIds.contains(hero.id) }
             .asUni()
     }
 
@@ -46,41 +47,12 @@ class GalaxyService {
         val georgeLucas = Director(id = 0, name = "George Lucas")
         directors[georgeLucas.id!!] = georgeLucas
 
-        val aNewHope = Film(
-            id = filmCounter++,
-            title = "A New Hope",
-            releaseDate = LocalDate.of(1977, Month.MAY, 25),
-            episodeID = 4,
-            directorId = georgeLucas.id,
-        )
-
-        val theEmpireStrikesBack = Film(
-            id = filmCounter++,
-            title = "The Empire Strikes Back",
-            releaseDate = LocalDate.of(1980, Month.MAY, 21),
-            episodeID = 5,
-            directorId = georgeLucas.id,
-        )
-
-        val returnOfTheJedi = Film(
-            id = filmCounter++,
-            title = "Return Of The Jedi",
-            releaseDate = LocalDate.of(1983, Month.MAY, 25),
-            episodeID = 6,
-            directorId = georgeLucas.id,
-        )
-
-        films[aNewHope.id!!] = aNewHope
-        films[theEmpireStrikesBack.id!!] = theEmpireStrikesBack
-        films[returnOfTheJedi.id!!] = returnOfTheJedi
-
         val luke = Hero(
             id = heroCounter++,
             name = "Luke",
             surname = "Skywalker",
             lightSaber = LightSaber.GREEN,
             darkSide = false,
-            episodeIds = listOf(4, 5, 6),
         )
 
         val leia = Hero(
@@ -89,7 +61,6 @@ class GalaxyService {
             surname = "Organa",
             darkSide = false,
             lightSaber = LightSaber.BLUE,
-            episodeIds = listOf(4, 5, 6),
         )
 
         val vader = Hero(
@@ -98,11 +69,44 @@ class GalaxyService {
             surname = "Vader",
             darkSide = true,
             lightSaber = LightSaber.RED,
-            episodeIds = listOf(4, 5, 6),
         )
 
         heroes[luke.id!!] = luke
         heroes[leia.id!!] = leia
         heroes[vader.id!!] = vader
+
+        val aNewHope = Film(
+            id = filmCounter++,
+            title = "A New Hope",
+            releaseDate = LocalDate.of(1977, Month.MAY, 25),
+            directorId = georgeLucas.id,
+            heroIds = setOf(luke.id, leia.id, vader.id)
+        )
+
+        val theEmpireStrikesBack = Film(
+            id = filmCounter++,
+            title = "The Empire Strikes Back",
+            releaseDate = LocalDate.of(1980, Month.MAY, 21),
+            directorId = georgeLucas.id,
+            heroIds = setOf(luke.id, leia.id, vader.id)
+        )
+
+        val returnOfTheJedi = Film(
+            id = filmCounter++,
+            title = "Return Of The Jedi",
+            releaseDate = LocalDate.of(1983, Month.MAY, 25),
+            directorId = georgeLucas.id,
+            heroIds = setOf(luke.id, leia.id, vader.id)
+        )
+
+        val rogueSquadron = Film(
+            id = filmCounter++,
+            title = "Rogue Squadron",
+        )
+
+        films[aNewHope.id!!] = aNewHope
+        films[theEmpireStrikesBack.id!!] = theEmpireStrikesBack
+        films[returnOfTheJedi.id!!] = returnOfTheJedi
+        films[rogueSquadron.id!!] = rogueSquadron
     }
 }

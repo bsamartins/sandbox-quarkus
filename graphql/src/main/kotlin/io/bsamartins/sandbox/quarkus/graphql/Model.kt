@@ -13,10 +13,11 @@ annotation class Model
 data class Film(
     val id: Int? = null,
     val title: String,
-    val episodeID: Int,
     @Ignore
-    val directorId: Int,
-    val releaseDate: LocalDate,
+    val directorId: Int? = null,
+    val releaseDate: LocalDate? = null,
+    @Ignore
+    val heroIds: Set<Int>? = setOf()
 )
 
 @Model
@@ -29,7 +30,6 @@ data class Hero(
     val surname: String,
     val darkSide: Boolean,
     val lightSaber: LightSaber,
-    val episodeIds: List<Int> = emptyList(),
 )
 
 @Model
@@ -39,7 +39,6 @@ class HeroInput {
     var surname: String? = null
     var darkSide: Boolean? = null
     var lightSaber: LightSaber? = null
-    var episodeIds: List<Int> = emptyList()
 }
 
 enum class LightSaber {

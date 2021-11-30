@@ -6,9 +6,12 @@ import org.eclipse.microprofile.graphql.GraphQLApi
 import org.eclipse.microprofile.graphql.Mutation
 import org.eclipse.microprofile.graphql.Query
 import org.eclipse.microprofile.graphql.Source
+import org.slf4j.LoggerFactory
 
 @GraphQLApi
 class FilmResource(private val service: GalaxyService) {
+
+    private val logger = LoggerFactory.getLogger(this::class.java)
 
     @Description("Get all Films from a galaxy far far away")
     @Query("allFilms")
@@ -35,7 +38,6 @@ class FilmResource(private val service: GalaxyService) {
                 surname = input.surname!!,
                 lightSaber = input.lightSaber!!,
                 darkSide = input.darkSide!!,
-                episodeIds = input.episodeIds,
             )
         )
     }
@@ -46,10 +48,13 @@ class FilmResource(private val service: GalaxyService) {
     }
 
     fun director(@Source film: Film): Uni<Director> {
+        film.directorId ?: return Uni.createFrom().nullItem()
+        logger.info("Fetching director for {}", film)
         return service.getDirector(film.directorId)
     }
 
     fun heroes(@Source film: Film): Uni<List<Hero>> {
+        logger.info("Fetching heroes for {}", film)
         return service.getHeroesByFilm(film)
     }
 }
