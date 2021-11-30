@@ -1,23 +1,35 @@
 package io.bsamartins.sandbox.quarkus.graphql
 
+import org.eclipse.microprofile.graphql.Ignore
 import java.time.LocalDate
 
-class Film {
-    var title: String? = null
-    var episodeID: Int? = null
-    var director: String? = null
-    var releaseDate: LocalDate? = null
-}
+@Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.SOURCE)
+@MustBeDocumented
+annotation class Model
 
-class Hero {
-    var name: String? = null
-    var surname: String? = null
-    var height: Double? = null
-    var mass: Int? = null
-    var darkSide: Boolean? = null
-    var lightSaber: LightSaber? = null
-    var episodeIds: List<Int> = emptyList()
-}
+@Model
+data class Film(
+    val title: String,
+    val episodeID: Int,
+    @Ignore
+    val directorId: Int,
+    val releaseDate: LocalDate,
+)
+
+@Model
+data class Director(val id: Int?, val name: String)
+
+@Model
+data class Hero(
+    val name: String,
+    val surname: String,
+    val height: Double,
+    val mass: Int,
+    val darkSide: Boolean,
+    val lightSaber: LightSaber,
+    val episodeIds: List<Int> = emptyList(),
+)
 
 enum class LightSaber {
     RED, BLUE, GREEN

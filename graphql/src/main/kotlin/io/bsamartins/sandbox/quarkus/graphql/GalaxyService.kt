@@ -9,6 +9,7 @@ import javax.enterprise.context.ApplicationScoped
 class GalaxyService {
     private val heroes: MutableList<Hero> = mutableListOf()
     private val films: MutableList<Film> = mutableListOf()
+    private val directors: MutableMap<Int, Director> = mutableMapOf()
 
     fun allFilms(): Uni<List<Film>> = films.asUni()
 
@@ -34,54 +35,66 @@ class GalaxyService {
         return heroes.filter { hero -> hero.surname == surname }.asUni()
     }
 
+    fun getDirector(id: Int): Uni<Director> = directors.getValue(id).asUni()
+
     init {
-        val aNewHope = Film()
-        aNewHope.title = "A New Hope"
-        aNewHope.releaseDate = LocalDate.of(1977, Month.MAY, 25)
-        aNewHope.episodeID = 4
-        aNewHope.director = "George Lucas"
+        val georgeLucas = Director(id = 0, name = "George Lucas")
+        directors[georgeLucas.id!!] = georgeLucas
 
-        val theEmpireStrikesBack = Film()
-        theEmpireStrikesBack.title = "The Empire Strikes Back"
-        theEmpireStrikesBack.releaseDate = LocalDate.of(1980, Month.MAY, 21)
-        theEmpireStrikesBack.episodeID = 5
-        theEmpireStrikesBack.director = "George Lucas"
+        val aNewHope = Film(
+            title = "A New Hope",
+            releaseDate = LocalDate.of(1977, Month.MAY, 25),
+            episodeID = 4,
+            directorId = georgeLucas.id,
+        )
 
-        val returnOfTheJedi = Film()
-        returnOfTheJedi.title = "Return Of The Jedi"
-        returnOfTheJedi.releaseDate = LocalDate.of(1983, Month.MAY, 25)
-        returnOfTheJedi.episodeID = 6
-        returnOfTheJedi.director = "George Lucas"
+        val theEmpireStrikesBack = Film(
+            title = "The Empire Strikes Back",
+            releaseDate = LocalDate.of(1980, Month.MAY, 21),
+            episodeID = 5,
+            directorId = georgeLucas.id,
+        )
+
+        val returnOfTheJedi = Film(
+            title = "Return Of The Jedi",
+            releaseDate = LocalDate.of(1983, Month.MAY, 25),
+            episodeID = 6,
+            directorId = georgeLucas.id,
+        )
 
         films.add(aNewHope)
         films.add(theEmpireStrikesBack)
         films.add(returnOfTheJedi)
 
-        val luke = Hero()
-        luke.name = "Luke"
-        luke.surname = "Skywalker"
-        luke.height = 1.7
-        luke.mass = 73
-        luke.lightSaber = LightSaber.GREEN
-        luke.darkSide = false
-        luke.episodeIds = listOf(4, 5, 6)
+        val luke = Hero(
+            name = "Luke",
+            surname = "Skywalker",
+            height = 1.7,
+            mass = 73,
+            lightSaber = LightSaber.GREEN,
+            darkSide = false,
+            episodeIds = listOf(4, 5, 6),
+        )
 
-        val leia = Hero()
-        leia.name = "Leia"
-        leia.surname = "Organa"
-        leia.height = 1.5
-        leia.mass = 51
-        leia.darkSide = false
-        leia.episodeIds = listOf(4, 5, 6)
+        val leia = Hero(
+            name = "Leia",
+            surname = "Organa",
+            height = 1.5,
+            mass = 51,
+            darkSide = false,
+            lightSaber = LightSaber.BLUE,
+            episodeIds = listOf(4, 5, 6),
+        )
 
-        val vader = Hero()
-        vader.name = "Darth"
-        vader.surname = "Vader"
-        vader.height = 1.9
-        vader.mass = 89
-        vader.darkSide = true
-        vader.lightSaber = LightSaber.RED
-        vader.episodeIds = listOf(4, 5, 6)
+        val vader = Hero(
+            name = "Darth",
+            surname = "Vader",
+            height = 1.9,
+            mass = 89,
+            darkSide = true,
+            lightSaber = LightSaber.RED,
+            episodeIds = listOf(4, 5, 6),
+        )
 
         heroes.add(luke)
         heroes.add(leia)
