@@ -1,5 +1,8 @@
 plugins {
     kotlin("jvm") apply false
+    kotlin("plugin.allopen") apply false
+    kotlin("plugin.jpa") apply false
+    id("io.quarkus") apply false
 }
 
 group = "io.bsamartins.sandbox.quarkus"
@@ -9,6 +12,7 @@ subprojects {
     apply(plugin = "kotlin")
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jetbrains.kotlin.plugin.allopen")
+    apply(plugin = "org.jetbrains.kotlin.plugin.jpa")
     apply(plugin = "io.quarkus")
 
     repositories {
@@ -24,9 +28,13 @@ subprojects {
 
         implementation(platform("org.jetbrains.kotlin:kotlin-bom:$kotlinVersion"))
         implementation(enforcedPlatform("io.quarkus.platform:quarkus-bom:$quarkusVersion"))
-        implementation("io.quarkus:quarkus-kotlin")
+
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+        implementation("io.quarkus:quarkus-kotlin")
         implementation("io.quarkus:quarkus-arc")
+        implementation("io.smallrye.reactive:mutiny-kotlin")
+
         testImplementation("io.quarkus:quarkus-junit5")
     }
 
@@ -35,14 +43,19 @@ subprojects {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
+    configure<org.jetbrains.kotlin.noarg.gradle.NoArgExtension> {
+        annotation("javax.persistence.Entity")
+    }
+
+    configure<org.jetbrains.kotlin.allopen.gradle.AllOpenExtension> {
+        annotation("javax.ws.rs.Path")
+        annotation("javax.enterprise.context.ApplicationScoped")
+        annotation("javax.persistence.Entity")
+        annotation("io.quarkus.test.junit.QuarkusTest")
+    }
+
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
         kotlinOptions.javaParameters = true
     }
 }
-
-//allOpen {
-//    annotation("javax.ws.rs.Path")
-//    annotation("javax.enterprise.context.ApplicationScoped")
-//    annotation("io.quarkus.test.junit.QuarkusTest")
-//}

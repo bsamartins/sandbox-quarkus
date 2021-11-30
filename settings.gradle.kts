@@ -9,7 +9,10 @@ pluginManagement {
     plugins {
         kotlin("jvm") version kotlinVersion
         kotlin("plugin.allopen") version kotlinVersion
+        kotlin("plugin.jpa") version kotlinVersion
         id("io.quarkus") version quarkusVersion
     }
 }
 rootProject.name = "sandbox-quarkus"
+
+include("hibernate-reactive")
