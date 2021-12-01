@@ -33,9 +33,9 @@ subprojects {
 
         implementation("io.quarkus:quarkus-kotlin")
         implementation("io.quarkus:quarkus-arc")
-        implementation("io.smallrye.reactive:mutiny-kotlin")
 
         testImplementation("io.quarkus:quarkus-junit5")
+        testImplementation("io.mockk:mockk:1.12.1")
     }
 
     configure<JavaPluginExtension> {

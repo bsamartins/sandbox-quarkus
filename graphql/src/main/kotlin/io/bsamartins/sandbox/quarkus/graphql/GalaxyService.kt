@@ -20,7 +20,7 @@ class GalaxyService {
         return films.getValue(id)
     }
 
-    fun getHeroesByFilm(heroIds: Set<Int>): List<Hero> {
+    fun getHeroesByIds(heroIds: Set<Int>): List<Hero> {
         return heroes.values.filter { hero -> heroIds.contains(hero.id) }
     }
 

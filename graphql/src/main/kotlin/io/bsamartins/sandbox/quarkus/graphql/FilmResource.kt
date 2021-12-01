@@ -61,6 +61,6 @@ class FilmResource(private val service: GalaxyService) {
     fun heroes(@Source film: Film): List<Hero>? {
         film.heroIds ?: return null
         logger.info("Fetching heroes for {}", film)
-        return service.getHeroesByFilm(film.heroIds)
+        return service.getHeroesByIds(film.heroIds)
     }
 }
