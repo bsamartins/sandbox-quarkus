@@ -1,6 +1,5 @@
 package io.bsamartins.sandbox.quarkus.graphql
 
-import io.smallrye.mutiny.Uni
 import org.eclipse.microprofile.graphql.Description
 import org.eclipse.microprofile.graphql.GraphQLApi
 import org.eclipse.microprofile.graphql.Mutation
@@ -15,23 +14,23 @@ class FilmResource(private val service: GalaxyService) {
 
     @Description("Get all Films from a galaxy far far away")
     @Query("allFilms")
-    fun allFilms(): Uni<List<Film>> {
+    fun allFilms(): List<Film> {
         return service.allFilms()
     }
 
     @Query
-    fun getHeroesWithSurname(surname: String): Uni<List<Hero>> {
+    fun getHeroesWithSurname(surname: String): List<Hero> {
         return service.getHeroesBySurname(surname)
     }
 
     @Query
     @Description("Get a Film from a galaxy far far away")
-    fun getFilm(filmId: Int): Uni<Film> {
+    fun getFilm(filmId: Int): Film {
         return service.getFilm(filmId)
     }
 
     @Mutation
-    fun createHero(input: HeroInput): Uni<Hero> {
+    fun createHero(input: HeroInput): Hero {
         return service.addHero(
             Hero(
                 name = input.name!!,
@@ -43,18 +42,25 @@ class FilmResource(private val service: GalaxyService) {
     }
 
     @Mutation
-    fun deleteHero(id: Int): Uni<Hero> {
+    fun deleteHero(id: Int): Hero {
         return service.deleteHero(id)
     }
 
-    fun director(@Source film: Film): Uni<Director> {
-        film.directorId ?: return Uni.createFrom().nullItem()
-        logger.info("Fetching director for {}", film)
-        return service.getDirector(film.directorId)
+    fun director(@Source films: List<Film>): List<Director?> {
+        logger.info("Fetching director for films {}", films)
+        val directors = mutableMapOf<Int, Director>()
+        return films.map { film ->
+            film.directorId ?: return@map null
+            return@map directors.computeIfAbsent(film.directorId) { id ->
+                logger.info("Fetching director for {}", film)
+                service.getDirector(id)
+            }
+        }
     }
 
-    fun heroes(@Source film: Film): Uni<List<Hero>> {
+    fun heroes(@Source film: Film): List<Hero>? {
+        film.heroIds ?: return null
         logger.info("Fetching heroes for {}", film)
-        return service.getHeroesByFilm(film)
+        return service.getHeroesByFilm(film.heroIds)
     }
 }

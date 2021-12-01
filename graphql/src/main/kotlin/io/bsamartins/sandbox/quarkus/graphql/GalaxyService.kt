@@ -1,6 +1,5 @@
 package io.bsamartins.sandbox.quarkus.graphql
 
-import io.smallrye.mutiny.Uni
 import java.time.LocalDate
 import java.time.Month
 import javax.enterprise.context.ApplicationScoped
@@ -15,33 +14,31 @@ class GalaxyService {
 
     private val directors: MutableMap<Int, Director> = mutableMapOf()
 
-    fun allFilms(): Uni<List<Film>> = films.values.toList().asUni()
+    fun allFilms(): List<Film> = films.values.toList()
 
-    fun getFilm(id: Int): Uni<Film> {
-        return films.getValue(id).asUni()
+    fun getFilm(id: Int): Film {
+        return films.getValue(id)
     }
 
-    fun getHeroesByFilm(film: Film): Uni<List<Hero>> {
-        film.heroIds ?: return Uni.createFrom().nullItem()
-        return heroes.values.filter { hero -> film.heroIds.contains(hero.id) }
-            .asUni()
+    fun getHeroesByFilm(heroIds: Set<Int>): List<Hero> {
+        return heroes.values.filter { hero -> heroIds.contains(hero.id) }
     }
 
-    fun addHero(hero: Hero): Uni<Hero> {
+    fun addHero(hero: Hero): Hero {
         val newHero = hero.copy(id = heroCounter++)
         heroes[newHero.id!!] = newHero
-        return newHero.asUni()
+        return newHero
     }
 
-    fun deleteHero(id: Int): Uni<Hero> {
-        return heroes.remove(id)!!.asUni()
+    fun deleteHero(id: Int): Hero {
+        return heroes.remove(id)!!
     }
 
-    fun getHeroesBySurname(surname: String): Uni<List<Hero>> {
-        return heroes.values.filter { hero -> hero.surname == surname }.asUni()
+    fun getHeroesBySurname(surname: String): List<Hero> {
+        return heroes.values.filter { hero -> hero.surname == surname }
     }
 
-    fun getDirector(id: Int): Uni<Director> = directors.getValue(id).asUni()
+    fun getDirector(id: Int): Director = directors.getValue(id)
 
     init {
         val georgeLucas = Director(id = 0, name = "George Lucas")
