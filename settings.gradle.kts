@@ -17,5 +17,6 @@ rootProject.name = "sandbox-quarkus"
 
 include(
     "hibernate-reactive",
-    "graphql"
+    "graphql",
+    "test-metrics"
 )

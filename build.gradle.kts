@@ -58,4 +58,17 @@ subprojects {
         kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
         kotlinOptions.javaParameters = true
     }
+
+    tasks.register<io.quarkus.gradle.tasks.QuarkusBuild>("quarkusBuildNative") {
+        System.setProperty("quarkus.package.type", "native")
+
+//        System.setProperty("quarkus.native.container-build", true.toString())
+//        System.setProperty("quarkus.native.build-image", "quay.io/quarkus/ubi-quarkus-native-image:21.3.0-java11")
+//        System.setProperty("quarkus.native.java-home", "/opt/java-11/")
+//        System.setProperty("quarkus.native.native-image-xmx", "4G")
+    }
+
+    tasks.withType<Test> {
+        useJUnitPlatform()
+    }
 }
