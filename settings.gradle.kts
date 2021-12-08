@@ -20,5 +20,6 @@ include(
     "graphql",
     "test-metrics",
     "module:dependency",
-    "module:main"
+    "module:main",
+    "neo4j"
 )
